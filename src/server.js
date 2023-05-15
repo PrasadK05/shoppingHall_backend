@@ -6,6 +6,7 @@ const fileupload = require("express-fileupload");
 const connect = require("./config/db");
 
 const userRoute = require("./routes/user.route");
+const User = require("./models/user.model");
 
 const PORT = process.env.PORT;
 
@@ -18,11 +19,15 @@ app.use(bodyParser.json());
 
 app.use("/user", userRoute);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {  
   res.send("SHOPHALL'S SERVER");
 });
 
 app.listen(PORT, async () => {
-  await connect();
-  console.log(`running at ${PORT}`);
+  try {    
+    await connect;
+    console.log(`running at ${PORT}`);
+  } catch (error) {
+    console.log(error);
+  }
 });

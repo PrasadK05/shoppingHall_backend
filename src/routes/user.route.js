@@ -22,7 +22,7 @@ app.post("/signup", async (req, res) => {
   if (!emailRegex.test(data.email)) {
     return res.send({ status: false, message: "Invalid Email" });
   }
-  if (!mobNumberRegex.test(data.monNumber)) {
+  if (!mobNumberRegex.test(data.mobNumber)) {
     return res.send({ status: false, message: "Invalid Mobile Number" });
   }
   if (!passwordRegex.test(data.password)) {
