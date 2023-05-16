@@ -6,7 +6,7 @@ const fileupload = require("express-fileupload");
 const connect = require("./config/db");
 
 const userRoute = require("./routes/user.route");
-const User = require("./models/user.model");
+
 
 const PORT = process.env.PORT;
 

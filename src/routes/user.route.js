@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const { generateOTP } = require("../utils/otp");
 const { sendMail } = require("../utils/mail");
+const { sendSms } = require("../utils/sms");
 
 const token_secret = process.env.TOKEN_KEY;
 
@@ -69,7 +70,7 @@ app.post("/login", async (req, res) => {
           expiresIn: "28 days",
         });
 
-        res.status(200).send({ status: true, token, user: body });
+        res.status(200).send({ status: true, token, user: bdy });
       } else {
         return res.send({ status: false, messege: "Wrong Password" });
       }
@@ -81,7 +82,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/get-otp", async (req, res) => {
+app.post("/get-otp-mail", async (req, res) => {
   let { email } = req.body;
   const otpGenerate = generateOTP();
 
@@ -99,6 +100,38 @@ app.post("/get-otp", async (req, res) => {
           return res.send({
             status: true,
             otp: "otp sent to register email id",
+          });
+        } else {
+          return res.send({ status: false, massage: "something went wrong" });
+        }
+      } catch (error) {
+        return res.send({ status: false, massage: "something went wrong" });
+      }
+    }
+  } catch (error) {
+    return res.send({ status: false, messege: "User not found" });
+  }
+});
+
+app.post("/get-otp-sms", async (req, res) => {
+  let { email } = req.body;
+  const otpGenerate = generateOTP();
+
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      try {
+        let updateOtp = await User.updateOne({ email }, { otp: otpGenerate });
+
+        let sms = await sendSms({
+          to: user.mobNumber,
+          OTP: otpGenerate,
+        });
+
+        if (sms) {
+          return res.send({
+            status: true,
+            otp: "otp sent to register mobile number",
           });
         } else {
           return res.send({ status: false, massage: "something went wrong" });
