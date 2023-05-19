@@ -13,7 +13,7 @@ let users = new mongoose.Schema({
   addressLine2: { type: String, default: null },
   state: { type: String, default: null },
   district: { type: String, default: null },
-  village: { type: String, default: null },
+  cityOrVillage: { type: String, default: null },
   pincode: { type: Number, default: null },
   role: {
     type: String,

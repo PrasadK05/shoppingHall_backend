@@ -6,7 +6,7 @@ let prod = new mongoose.Schema({
   price: { type: Number, required: true },
   category: { type: String, required: true },
   thumbnail: { type: String, required: true },
-  images: [{ type: String }],
+  images: [ {type: String} ],
   brand: { type: String, required: true },
   stock: { type: Number, required: true },
   rating: { type: Number, required: true },

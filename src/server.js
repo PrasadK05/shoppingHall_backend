@@ -6,7 +6,7 @@ const fileupload = require("express-fileupload");
 const connect = require("./config/db");
 
 const userRoute = require("./routes/user.route");
-
+const productRoute = require("./routes/product.route");
 
 const PORT = process.env.PORT;
 
@@ -18,13 +18,14 @@ app.use(fileupload({ useTempFiles: true }));
 app.use(bodyParser.json());
 
 app.use("/user", userRoute);
+app.use("/product", productRoute);
 
-app.get("/", async (req, res) => {  
+app.get("/", async (req, res) => {
   res.send("SHOPHALL'S SERVER");
 });
 
 app.listen(PORT, async () => {
-  try {    
+  try {
     await connect;
     console.log(`running at ${PORT}`);
   } catch (error) {
