@@ -7,6 +7,7 @@ const connect = require("./config/db");
 
 const userRoute = require("./routes/user.route");
 const productRoute = require("./routes/product.route");
+const purchaseRoute = require("./routes/purchase.route");
 
 const PORT = process.env.PORT;
 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 
 app.use("/user", userRoute);
 app.use("/product", productRoute);
+app.use("/purchase", purchaseRoute);
 
 app.get("/", async (req, res) => {
   res.send("SHOPHALL'S SERVER");

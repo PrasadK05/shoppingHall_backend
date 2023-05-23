@@ -20,7 +20,7 @@ let users = new mongoose.Schema({
     enum: ["user", "admin", "shippingUser", "deliveryUser"],
     default: "user",
   },
-  otp: { type: String, default: null },
+  otp: { type: String, default: null }, 
 });
 
 let User = mongoose.model("user", users);

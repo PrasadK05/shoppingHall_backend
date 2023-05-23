@@ -21,30 +21,36 @@ app.post("/signup", async (req, res) => {
 
   // Checking values as per RegEx
   if (!emailRegex.test(data.email)) {
-    return res.send({ status: false, message: "Invalid Email" });
+    return res.status(400).send({ status: false, message: "Invalid Email" });
   }
   if (!mobNumberRegex.test(data.mobNumber)) {
-    return res.send({ status: false, message: "Invalid Mobile Number" });
+    return res
+      .status(400)
+      .send({ status: false, message: "Invalid Mobile Number" });
   }
   if (!passwordRegex.test(data.password)) {
-    return res.send({ status: false, message: "Invalid Password" });
+    return res.status(400).send({ status: false, message: "Invalid Password" });
   }
 
   // Checking exsitance of user
   let already_exist = await User.findOne({ email: data.email });
   if (already_exist) {
-    return res.send({ status: false, message: "User Already Registered" });
+    return res
+      .status(400)
+      .send({ status: false, message: "User Already Registered" });
   }
   // Signup
   let hash = await argon2.hash(data.password);
   let user = await User.create({ ...data, password: hash });
   if (user) {
-    return res.send({
+    return res.status(200).send({
       status: true,
       messege: "User Created Successfully",
     });
   } else {
-    return res.send({ status: false, messege: "Something Went Wrong" });
+    return res
+      .status(400)
+      .send({ status: false, messege: "Something Went Wrong" });
   }
 });
 
@@ -56,6 +62,7 @@ app.post("/login", async (req, res) => {
     if (user) {
       if (await argon2.verify(user.password, password)) {
         let bdy = {
+          _id,
           email,
           fillName,
           avatar,
@@ -72,13 +79,15 @@ app.post("/login", async (req, res) => {
 
         res.status(200).send({ status: true, token, user: bdy });
       } else {
-        return res.send({ status: false, messege: "Wrong Password" });
+        return res
+          .status(400)
+          .send({ status: false, messege: "Wrong Password" });
       }
     } else {
-      return res.send({ status: false, messege: "User not found" });
+      return res.status(404).send({ status: false, messege: "User not found" });
     }
   } catch (e) {
-    return res.send({ status: false, messege: "User not found" });
+    return res.status(404).send({ status: false, messege: "User not found" });
   }
 });
 
@@ -97,19 +106,23 @@ app.post("/get-otp-mail", async (req, res) => {
           OTP: otpGenerate,
         });
         if (mail) {
-          return res.send({
+          return res.status(200).send({
             status: true,
             otp: "otp sent to register email id",
           });
         } else {
-          return res.send({ status: false, massage: "something went wrong" });
+          return res
+            .status(400)
+            .send({ status: false, massage: "something went wrong" });
         }
       } catch (error) {
-        return res.send({ status: false, massage: "something went wrong" });
+        return res
+          .status(400)
+          .send({ status: false, massage: "something went wrong" });
       }
     }
   } catch (error) {
-    return res.send({ status: false, messege: "User not found" });
+    return res.status(404).send({ status: false, messege: "User not found" });
   }
 });
 
@@ -129,19 +142,23 @@ app.post("/get-otp-sms", async (req, res) => {
         });
 
         if (sms) {
-          return res.send({
+          return res.status(200).send({
             status: true,
             otp: "otp sent to register mobile number",
           });
         } else {
-          return res.send({ status: false, massage: "something went wrong" });
+          return res
+            .status(400)
+            .send({ status: false, massage: "something went wrong" });
         }
       } catch (error) {
-        return res.send({ status: false, massage: "something went wrong" });
+        return res
+          .status(400)
+          .send({ status: false, massage: "something went wrong" });
       }
     }
   } catch (error) {
-    return res.send({ status: false, messege: "User not found" });
+    return res.status(404).send({ status: false, messege: "User not found" });
   }
 });
 
@@ -152,14 +169,18 @@ app.post("forgot-password", async (req, res) => {
     return res.send("user not found !");
   }
   if (user.otp != otp) {
-    return res.send({ status: false, messege: "wrong otp" });
+    return res.status(400).send({ status: false, messege: "wrong otp" });
   }
   let hash = await argon2.hash(password);
   try {
     let updateUser = await User.findOneAndUpdate({ email }, { password: hash });
-    res.send({ status: true, messege: "password updated successfully" });
+    res
+      .status(200)
+      .send({ status: true, messege: "password updated successfully" });
   } catch (error) {
-    return res.send({ status: false, messege: "something went wrong" });
+    return res
+      .status(400)
+      .send({ status: false, messege: "something went wrong" });
   }
 });
 

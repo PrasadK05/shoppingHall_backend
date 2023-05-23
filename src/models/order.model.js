@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 let ord = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+  quantity: { type: Number },
   shippingAddress: {
     addressLine1: { type: String },
     addressLine2: { type: String },
