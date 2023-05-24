@@ -23,17 +23,26 @@ let ord = new mongoose.Schema({
   isCancelled: {
     status: { type: Boolean, default: false },
     reasone: { type: String, default: null },
-    time: { type: Number, default: null },
+    timestamp: { type: Number, default: null },
+    date: { type: Number, default: null },
+    month: { type: String, default: null },
+    year: { type: Number, default: null },
   },
   isShipped: {
     status: { type: Boolean, default: false },
     remark: { type: String, default: null },
-    time: { type: Number, default: null },
+    timestamp: { type: Number, default: null },
+    date: { type: Number, default: null },
+    month: { type: String, default: null },
+    year: { type: Number, default: null },
   },
   isDelivered: {
     status: { type: Boolean, default: false },
     remark: { type: String, default: null },
-    time: { type: Number, default: null },
+    timestamp: { type: Number, default: null },
+    date: { type: Number, default: null },
+    month: { type: String, default: null },
+    year: { type: Number, default: null },
   },
 });
 

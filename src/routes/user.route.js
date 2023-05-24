@@ -62,20 +62,22 @@ app.post("/login", async (req, res) => {
     if (user) {
       if (await argon2.verify(user.password, password)) {
         let bdy = {
-          _id,
-          email,
-          fillName,
-          avatar,
-          addressLine1,
-          addressLine2,
-          state,
-          district,
-          village,
-          pincode,
+          _id: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          avatar: user.avatar,
+          addressLine1: user.addressLine1,
+          addressLine2: user.addressLine2,
+          state: user.state,
+          district: user.district,
+          cityOrVillage: user.cityOrVillage,
+          pincode: user.pincode,
         };
         let token = jwt.sign(bdy, token_secret, {
           expiresIn: "28 days",
         });
+
+        let usr = await User.updateOne({ email }, { token });
 
         res.status(200).send({ status: true, token, user: bdy });
       } else {
@@ -88,6 +90,17 @@ app.post("/login", async (req, res) => {
     }
   } catch (e) {
     return res.status(404).send({ status: false, messege: "User not found" });
+  }
+});
+
+app.post("/logout", async (req, res) => {
+  let { token } = req.headers;
+  let decode = jwt.decode(token, token_secret);
+  try {
+    let out = await User.updateOne({ _id: decode._id }, { token: null });
+    res.status(200).send({ message: "user logout successfull" });
+  } catch (error) {
+    res.status(400).send({ message: "Something went wrong" });
   }
 });
 

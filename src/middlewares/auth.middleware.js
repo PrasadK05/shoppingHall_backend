@@ -12,7 +12,7 @@ const verifyToken = async function (req, res, next) {
     const verification = await jwt.verify(token, token_secret);
     next();
   } catch (e) {
-    return res.status(401).send("Operation not allowed.");
+    return res.status(401).send({ message: e });
   }
 };
 
